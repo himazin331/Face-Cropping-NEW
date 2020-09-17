@@ -4,6 +4,7 @@ import argparse as arg
 import sys
 import numpy as np
 from natsort import natsorted
+import mimetypes
 
 # 画像加工
 def face_cut(imgs_dir, result_out, img_size, ch, label, HAAR_FILE):
@@ -16,9 +17,9 @@ def face_cut(imgs_dir, result_out, img_size, ch, label, HAAR_FILE):
 
         print("画像データ:{}".format(img_name))
         
-        # 対応フォーマット -> JPEG, PNG, BMP
-        _, ext = os.path.splitext(img_name)
-        if ext.lower() in ['.jpg', '.png', '.bmp']:
+        # 対応MIMEタイプ -> image
+        mime = mimetypes.guess_type(img_name)
+        if 'image' in mime[0]:
             
             img = cv2.imread(img_name)  # データ読み込み
             
@@ -48,7 +49,7 @@ def face_cut(imgs_dir, result_out, img_size, ch, label, HAAR_FILE):
                     face_img = cv2.resize(face_cut, (img_size, img_size))
         
                     # 保存
-                    result_img_name = '\data' + str(label) + '.jpg'
+                    result_img_name = r'\data' + str(label) + '.jpg'
                     cv2.imwrite(os.path.join(result_out + result_img_name), face_img)
                     label += 1
             
