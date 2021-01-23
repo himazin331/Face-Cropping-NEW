@@ -19,9 +19,14 @@ def face_cut(imgs_dir, result_out, img_size, ch, label, HAAR_FILE):
         
         # 対応MIMEタイプ -> image
         mime = mimetypes.guess_type(img_name)
+        # Thumbs.db対処
+        if mime[0] == None:
+            print("Unsupported file extension")
+            continue
+
         if 'image' in mime[0]:
-            
-            img = cv2.imread(img_name)  # データ読み込み
+            img_path = os.path.join(imgs_dir, img_name)
+            img = cv2.imread(img_path)  # データ読み込み
             
             # チャンネル数が１であれば
             if ch == 1:
